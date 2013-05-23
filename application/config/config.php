@@ -14,7 +14,14 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://localhost/www/phil_abicim/';
+$config['base_url']	= 'http://localhost/www/harkutco_cloud_quiz/';
+
+
+/******* this config is for live server *******
+
+$config['base_url']	= 'http://localhost/www/harkutco_cloud_quiz/';
+
+*********************/
 
 /*
 |--------------------------------------------------------------------------

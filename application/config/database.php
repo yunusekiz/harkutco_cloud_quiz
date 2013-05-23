@@ -48,10 +48,18 @@
 $active_group = 'default';
 $active_record = TRUE;
 
+
+/******* this config is for live server *******
+
+$db['default']['username'] = 'harkutco';
+
+*********************/
+
+
 $db['default']['hostname'] = 'localhost';
 $db['default']['username'] = 'root';
 $db['default']['password'] = '';
-$db['default']['database'] = 'phil_abicim';
+$db['default']['database'] = 'harkutco_cloud_quiz';
 $db['default']['dbdriver'] = 'mysqli';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
