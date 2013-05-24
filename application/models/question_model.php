@@ -2,7 +2,7 @@
 
 class question_model extends CI_Model {
 
-	protected $last_record_id;
+	public $last_record_id;
 
 
 	public function __construct()
@@ -24,7 +24,7 @@ class question_model extends CI_Model {
 							);
 
 		$this->model_killer_library->insertNewRow($insert_data);
-		return $this->last_record_id = $this->model_killer_library->getLastRecordId();
+	 	return $this->last_record_id = $this->model_killer_library->getLastRecordId();
 	}
 
 
@@ -47,11 +47,6 @@ class question_model extends CI_Model {
 	public function deleteRow($row_id)
 	{
 		return $this->model_killer_library->deleteRow($row_id);
-	}
-
-	public function getLastRecordId()
-	{
-		return $this->last_record_id;
 	}
 
 

@@ -94,10 +94,9 @@
                 <ul class="nav pull-left">
                     <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-file icon-white"></i> Sınavlar <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="/user/preferences" data-toggle="modal"><i class="icon-plus"></i> Yeni Sınav Oluştur</a></li>
-                            <li><a href="/help/support"><i class="icon-signal"></i> Sınav İstatistikleri</a></li>
+                            <li><a href="#" data-toggle="modal"><i class="icon-plus"></i> Yeni Sınav Oluştur</a></li>
                             <li class="divider"></li>
-                            <li><a href="/auth/logout"><i class="icon-off"></i> Logout</a></li>
+                           <li><a href="#"><i class="icon-signal"></i> Sınav İstatistikleri</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -110,8 +109,8 @@
                             <li><a href="{base}admin_console/addNewQuestionForm"><i class="icon-plus"></i> Yeni Soru Oluştur</a></li>
                             <li><a href="{base}admin_console/addNewSubjectForm"><i class="icon-plus"></i> Yeni Konu Oluştur</a></li>
                             <li class="divider"></li>
-                            <li><a href="/auth/logout"><i class=" icon-edit"></i> Soruları Düzenle</a></li>
-                             <li><a href="/auth/logout"><i class="icon-edit"></i> Konuları Düzenle </a></li>
+                            <li><a href="#"><i class=" icon-edit"></i> Soruları Düzenle</a></li>
+                             <li><a href="#"><i class="icon-edit"></i> Konuları Düzenle </a></li>
                         </ul>
                     </li>
                 </ul>
@@ -119,12 +118,11 @@
 
               <div class="pull-right">
                 <ul class="nav pull-right">
-                    <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cog icon-white"></i> Welcome, User <b class="caret"></b></a>
+                    <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cog icon-white"></i> Yönetici <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="/user/preferences"><i class="icon-cog"></i> Preferences</a></li>
-                            <li><a href="/help/support"><i class="icon-envelope"></i> Contact Support</a></li>
+                            <li><a href="#"><i class="icon-cog"></i> Hesap Ayarları </a></li>
                             <li class="divider"></li>
-                            <li><a href="/auth/logout"><i class="icon-off"></i> Logout</a></li>
+                            <li><a href="{base}logout"><i class="icon-off"></i> Oturumu Kapat</a></li>
                         </ul>
                     </li>
                 </ul>

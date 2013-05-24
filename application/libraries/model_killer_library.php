@@ -64,7 +64,7 @@ class model_killer_library extends CI_Model {
 
 		if ($this->db->affected_rows()>0)
 		{
-			$this->last_record_id = $this->db->insert_id();
+			$this->setLastRecordId($this->db->insert_id());
 			return TRUE;			
 		}
 		else

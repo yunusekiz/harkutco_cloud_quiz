@@ -4,7 +4,7 @@ class admin_console extends CI_Controller {
 
 	protected $parser_data;
 
-	protected $last_question_id;
+	public $last_question_id;
 
 
 	function __construct()
@@ -59,9 +59,12 @@ class admin_console extends CI_Controller {
 		$subjects = array_values(array_filter($subjects)); // bu fonksiyon subjects içerisindeki boş elemanları filtreler,temizler		
 		
 		if (($lecture_id!=0)&&(count($subjects)!=0)) 
-		{
+		{	
+			$this->load->model('subject_model');
+			
 			$c = count($subjects);
 			$a = 0;
+
 			foreach ($subjects as $subject) 
 			{
 				$insert_new_subject = $this->subject_model->insertNewSubject($subject,$lecture_id);
@@ -126,10 +129,8 @@ class admin_console extends CI_Controller {
 			$insert_new_question = $this->question_model->insertNewQuestion($question,$subject_id);
 			if ($insert_new_question == TRUE) 
 			{
-				$this->last_question_id = $this->question_model->getLastRecordId();
-				$message = 'Soru Ekleme Basarili..!';
-				echo "<script>alert(\"$message\");</script>";
-				echo "<meta http-equiv='refresh' content='0.1; URL=".base_url()."admin_console/addNewAnswerForm'>";				
+				$this->last_question_id = $this->question_model->last_record_id;
+				$this->addNewAnswerForm();
 			}
 
 		}
@@ -141,7 +142,6 @@ class admin_console extends CI_Controller {
 		}
 
 	}
-
 
 	public function addNewAnswerForm()
 	{
@@ -165,8 +165,7 @@ class admin_console extends CI_Controller {
 		$option_d = $this->input->post('option_d');
 
 	
-	}	
-
+	}
 
 
 

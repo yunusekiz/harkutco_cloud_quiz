@@ -51,14 +51,16 @@ $active_record = TRUE;
 
 /******* this config is for live server *******
 
-$db['default']['username'] = 'harkutco';
 
+$db['default']['username'] = 'harkutco_yunus';
+$db['default']['password'] = 'kavun90';
 *********************/
 
 
-$db['default']['hostname'] = 'localhost';
+
 $db['default']['username'] = 'root';
 $db['default']['password'] = '';
+$db['default']['hostname'] = 'localhost';
 $db['default']['database'] = 'harkutco_cloud_quiz';
 $db['default']['dbdriver'] = 'mysqli';
 $db['default']['dbprefix'] = '';
