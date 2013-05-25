@@ -21,6 +21,7 @@ class admin_console extends CI_Controller {
 		}		
 
 		$this->parser_data['base'] = base_url();
+
 	}
 
 	public function index()
@@ -102,20 +103,18 @@ class admin_console extends CI_Controller {
 
 	}
 
-
 	public function addNewQuestionForm()
 	{
 		$this->load->model('subject_model');
-		$subjects = $this->subject_model->readRow();
-
 		$this->parser_data['title'] = 'Yeni Soru Oluştur';
-		$this->parser_data['subjects'] = $subjects;
-
+		$this->parser_data['subjects'] = $this->subject_model->readRow();
 		// admin panelinin view lerini yükler
 		$this->parser->parse('admin_view_header', $this->parser_data);
 		$this->parser->parse('add_new_question_view', $this->parser_data);
 		$this->parser->parse('admin_view_footer', $this->parser_data);
 	}
+
+
 
 	public function addNewQuestion()
 	{
@@ -125,12 +124,12 @@ class admin_console extends CI_Controller {
 		if ( ($subject_id!=0) && ($question!='') ) 
 		{
 			$this->load->model('question_model');
-			
 			$insert_new_question = $this->question_model->insertNewQuestion($question,$subject_id);
 			if ($insert_new_question == TRUE) 
 			{
 				$this->last_question_id = $this->question_model->last_record_id;
-				$this->addNewAnswerForm();
+				//$this->addNewAnswerForm();
+				echo "<meta http-equiv='refresh' content='0.1; URL=".base_url()."admin_console/addNewAnswerForm'>";
 			}
 
 		}
@@ -148,7 +147,7 @@ class admin_console extends CI_Controller {
 		$this->load->model('question_model');
 		$last_question = $this->question_model->readRow($this->last_question_id);
 
-		$this->parser_data['title'] = 'Yeni CevapOluştur';
+		$this->parser_data['title'] = 'Yeni Cevap Oluştur';
 		$this->parser_data['last_question'] = $last_question;		
 
 		$this->parser->parse('admin_view_header', $this->parser_data);
@@ -159,12 +158,110 @@ class admin_console extends CI_Controller {
 
 	public function addNewAnswer()
 	{
-		$option_a = $this->input->post('option_a');
-		$option_b = $this->input->post('option_b');
-		$option_c = $this->input->post('option_c');
-		$option_d = $this->input->post('option_d');
+		$question_id = $this->input->post('question_id');
+		$this->last_question_id = $question_id;
 
-	
+		$answers = $this->input->post('answers');
+		$answers = @array_values(array_filter($answers)); // bu fonksiyon answers içerisindeki boş elemanları filtreler,temizler
+
+		if (count($answers)!=0) 
+		{
+			$c = count($answers);
+			$a = 0;
+
+			$this->load->model('answer_model');
+
+			foreach ($answers as  $answer) 
+			{
+				$insert_new_answer = $this->answer_model->insertNewAnswer($answer,$question_id);
+				if ($insert_new_answer == TRUE) 
+				{
+					$a = $a+1;
+					if ($a == $c) 
+					{
+						$message = "Tebrikler..! Cevap ekleme de basarili";
+						echo "<script>alert(\"$message\");</script>";
+						echo "<meta http-equiv='refresh' content='0.1; URL=".base_url()."admin_console/addNewSolutionForm'>";
+
+					}
+
+				}
+				else
+				{
+					$message = "HATA:: Cevap Ekleme İslemi Basarisiz Oldu :(";
+					echo "<script>alert(\"$message\");</script>";
+					$this->addNewAnswerForm();
+
+				}
+			}
+		}
+		else
+		{
+			$message = "Hic Olmassa Bir Tanecik Cevap Ekleyin :(";
+			echo "<script>alert(\"$message\");</script>";
+			$this->addNewAnswerForm();
+
+		}	
+
+	}
+
+
+	public function addNewSolutionForm()
+	{
+		$question_model = $this->load->model('question_model');
+		$this->parser_data['last_question'] = $this->question_model->readRow($this->last_question_id);
+		
+		$answer_model = $this->load->model('answer_model');
+		$this->parser_data['last_answers'] = $this->answer_model->readRow($this->last_question_id);
+
+		$this->parser_data['title'] = 'Yeni Çözüm Ekle';
+
+		//print_r($ci->question_model->readRow());
+
+		//var_dump($this->answer_model->readRow($this->last_question_id));
+
+		$this->parser->parse('admin_view_header', $this->parser_data);
+		$this->parser->parse('add_new_solution_view', $this->parser_data);
+		$this->parser->parse('admin_view_footer', $this->parser_data);
+
+	}
+
+	public function addNewSolution()
+	{
+		$question_id	= $this->input->post('question_id');
+		$answer_id		= $this->input->post('answer_id');
+
+		if ($answer_id!='') 
+		{
+			$this->load->model('solution_model');
+			$add_new_solution = $this->solution_model->insertNewSolution($question_id,$answer_id);
+			if ($add_new_solution==TRUE) 
+			{
+				$message = "Tebrikler..! Dogru cevap ta eklendi :))";
+				echo "<script>alert(\"$message\");</script>";
+				echo "<meta http-equiv='refresh' content='0.1; URL=".base_url()."admin_console'>";
+			}
+			else
+			{
+				$message = "Dogru cevap eklenemedi :(";
+				echo "<script>alert(\"$message\");</script>";
+				$this->addNewSolutionForm();
+			}
+		}
+		else
+		{
+			$message = "Lutfen dogru cevabi secin :(";
+			echo "<script>alert(\"$message\");</script>";
+			$this->addNewSolutionForm();			
+		}
+	}
+
+
+	public function deneme()
+	{
+		$this->parser->parse('admin_view_header', $this->parser_data);
+		$this->parser->parse('deneme_view', $this->parser_data);
+		$this->parser->parse('admin_view_footer', $this->parser_data);
 	}
 
 

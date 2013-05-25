@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Anamakine: localhost
--- Üretim Zamanı: 23 May 2013, 21:40:38
+-- Üretim Zamanı: 25 May 2013, 16:57:55
 -- Sunucu sürümü: 5.5.25a
 -- PHP Sürümü: 5.4.4
 
@@ -29,11 +29,21 @@ SET time_zone = "+00:00";
 CREATE TABLE IF NOT EXISTS `answer` (
   `answer_id` int(11) NOT NULL AUTO_INCREMENT,
   `answer_detail` text NOT NULL,
-  `answer_letter` text NOT NULL,
   `question_id` int(11) NOT NULL,
   PRIMARY KEY (`answer_id`),
   KEY `question_id` (`question_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=198 ;
+
+--
+-- Tablo döküm verisi `answer`
+--
+
+INSERT INTO `answer` (`answer_id`, `answer_detail`, `question_id`) VALUES
+(193, 'bu benim size cevabım 1', 16),
+(194, 'bu benim size cevabım 2', 16),
+(195, 'bu benim size cevabım 3', 16),
+(196, 'bu benim size cevabım 4', 16),
+(197, 'bu benim size cevabım 5', 16);
 
 -- --------------------------------------------------------
 
@@ -69,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `lecture` (
   `lecture_id` int(11) NOT NULL AUTO_INCREMENT,
   `lecture_name` text NOT NULL,
   PRIMARY KEY (`lecture_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
 -- Tablo döküm verisi `lecture`
@@ -126,14 +136,46 @@ CREATE TABLE IF NOT EXISTS `question` (
   `subject_id` int(11) NOT NULL,
   PRIMARY KEY (`question_id`),
   KEY `subject_id` (`subject_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
 
 --
 -- Tablo döküm verisi `question`
 --
 
 INSERT INTO `question` (`question_id`, `question_detail`, `subject_id`) VALUES
-(3, 'aşağıdakilerrin hangisi aşağıdadır', 11);
+(16, 'bu benim ilk sorum', 13);
+
+-- --------------------------------------------------------
+
+--
+-- Görünüm yapısı durumu `question_and_answer`
+--
+CREATE TABLE IF NOT EXISTS `question_and_answer` (
+`question_id` int(11)
+,`question_detail` text
+,`answer_id` int(11)
+,`answer_detail` text
+);
+-- --------------------------------------------------------
+
+--
+-- Tablo için tablo yapısı `solution`
+--
+
+CREATE TABLE IF NOT EXISTS `solution` (
+  `solution_id` int(11) NOT NULL AUTO_INCREMENT,
+  `question_id` int(11) NOT NULL,
+  `answer_id` int(11) NOT NULL,
+  PRIMARY KEY (`solution_id`),
+  KEY `answer_id` (`answer_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- Tablo döküm verisi `solution`
+--
+
+INSERT INTO `solution` (`solution_id`, `question_id`, `answer_id`) VALUES
+(1, 16, 195);
 
 -- --------------------------------------------------------
 
@@ -147,7 +189,7 @@ CREATE TABLE IF NOT EXISTS `subject` (
   `lecture_id` int(11) NOT NULL,
   PRIMARY KEY (`subject_id`),
   KEY `lecture_id` (`lecture_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=15 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=18 ;
 
 --
 -- Tablo döküm verisi `subject`
@@ -157,7 +199,10 @@ INSERT INTO `subject` (`subject_id`, `subject_name`, `lecture_id`) VALUES
 (10, 'anlatim bozukluklari', 2),
 (11, 'dilbilgisi', 2),
 (12, 'noktalama işaretleri', 2),
-(13, 'cümle bilgisi', 2);
+(13, 'cümle bilgisi', 2),
+(15, 'yeni bir konu', 2),
+(16, 'yeni bir konu', 2),
+(17, 'hayat bilgisi', 2);
 
 -- --------------------------------------------------------
 
@@ -207,7 +252,7 @@ CREATE TABLE IF NOT EXISTS `teacher_branch` (
   `teacher_branch_id` int(11) NOT NULL AUTO_INCREMENT,
   `teacher_branch_name` text NOT NULL,
   PRIMARY KEY (`teacher_branch_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
 -- Tablo döküm verisi `teacher_branch`
@@ -259,6 +304,15 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 -- --------------------------------------------------------
 
 --
+-- Görünüm yapısı `question_and_answer`
+--
+DROP TABLE IF EXISTS `question_and_answer`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `question_and_answer` AS select `question`.`question_id` AS `question_id`,`question`.`question_detail` AS `question_detail`,`answer`.`answer_id` AS `answer_id`,`answer`.`answer_detail` AS `answer_detail` from (`question` join `answer`) where (`question`.`question_id` = `answer`.`question_id`);
+
+-- --------------------------------------------------------
+
+--
 -- Görünüm yapısı `teacher_brach_view`
 --
 DROP TABLE IF EXISTS `teacher_brach_view`;
@@ -268,6 +322,12 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 -- Dökümü yapılmış tablolar için kısıtlamalar
 --
+
+--
+-- Tablo kısıtlamaları `answer`
+--
+ALTER TABLE `answer`
+  ADD CONSTRAINT `answer_ibfk_1` FOREIGN KEY (`question_id`) REFERENCES `question` (`question_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Tablo kısıtlamaları `message`
@@ -281,6 +341,12 @@ ALTER TABLE `message`
 --
 ALTER TABLE `question`
   ADD CONSTRAINT `question_ibfk_1` FOREIGN KEY (`subject_id`) REFERENCES `subject` (`subject_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Tablo kısıtlamaları `solution`
+--
+ALTER TABLE `solution`
+  ADD CONSTRAINT `solution_ibfk_1` FOREIGN KEY (`answer_id`) REFERENCES `answer` (`answer_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Tablo kısıtlamaları `subject`

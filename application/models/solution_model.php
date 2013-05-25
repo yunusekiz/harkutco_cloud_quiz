@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class question_model extends CI_Model {
+class solution_model extends CI_Model {
 
 	public $last_record_id;
 
@@ -10,17 +10,17 @@ class question_model extends CI_Model {
         parent::__construct();
 
         $this->load->library('model_killer_library');
-        $this->model_killer_library->setTableName('question');
-        $this->model_killer_library->setNameOfIdColumn('question_id');
+        $this->model_killer_library->setTableName('solution');
+        $this->model_killer_library->setNameOfIdColumn('solution_id');
         //$this->model_killer_library->setViewTableName('question_and_answer');
     }
 
 
-	public function insertNewQuestion($question_detail,$subject_id)
+	public function insertNewSolution($question_id,$answer_id)
 	{
 		$insert_data = array(
-								'question_detail' 	=> $question_detail,
-								'subject_id'		=> $subject_id
+								'question_id' 	=> $question_id,
+								'answer_id'		=> $answer_id
 							);
 
 		$this->model_killer_library->insertNewRow($insert_data);
@@ -33,14 +33,14 @@ class question_model extends CI_Model {
 		return $this->model_killer_library->readRow($record_id);
 	}
 
-	public function updateSubject($question_id, $question_detail, $subject_id)
+	public function updateSolution($solution_id, $question_id, $answer_id)
 	{
 		$update_data = array(
-								'question_detail' 	=> $question_detail,
-								'subject_id'		=> $subject_id
+								'question_id' 	=> $question_id,
+								'answer_id'		=> $answer_id
 							);
 
-		return $this->model_killer_library->updateRow($question_id, $update_data);
+		return $this->model_killer_library->updateRow($solution_id, $update_data);
 
 	}
 
