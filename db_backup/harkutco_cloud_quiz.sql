@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Anamakine: localhost
--- Üretim Zamanı: 25 May 2013, 16:57:55
+-- Üretim Zamanı: 27 May 2013, 12:13:57
 -- Sunucu sürümü: 5.5.25a
 -- PHP Sürümü: 5.4.4
 
@@ -32,18 +32,17 @@ CREATE TABLE IF NOT EXISTS `answer` (
   `question_id` int(11) NOT NULL,
   PRIMARY KEY (`answer_id`),
   KEY `question_id` (`question_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=198 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=239 ;
 
 --
 -- Tablo döküm verisi `answer`
 --
 
 INSERT INTO `answer` (`answer_id`, `answer_detail`, `question_id`) VALUES
-(193, 'bu benim size cevabım 1', 16),
-(194, 'bu benim size cevabım 2', 16),
-(195, 'bu benim size cevabım 3', 16),
-(196, 'bu benim size cevabım 4', 16),
-(197, 'bu benim size cevabım 5', 16);
+(235, 'seni sevmiyor değilim', 36),
+(236, 'seni sevdiğimi söylersem yalan söylemiş olurum', 36),
+(237, 'seni sevmiyor olma ihtimalimin olmadığını söylersem en azından dürüst davranmış olurum', 36),
+(238, 'bens senin beni sevebilme ihtimalini sevdim', 36);
 
 -- --------------------------------------------------------
 
@@ -68,6 +67,46 @@ CREATE TABLE IF NOT EXISTS `event` (
 INSERT INTO `event` (`event_id`, `event_date`, `event_title`, `event_detail`, `event_builder_ssn`) VALUES
 (2, '20-07-1974', 'kizim ayse tatile ciksin', 'kizim ayse annesini de alip tatile ciksin', 13368369400),
 (6, '20-07-2013', 'kar tatili', 'bugun kar tatiti cocuklar okula gelmeyin', 13368369400);
+
+-- --------------------------------------------------------
+
+--
+-- Tablo için tablo yapısı `exam`
+--
+
+CREATE TABLE IF NOT EXISTS `exam` (
+  `exam_id` int(11) NOT NULL AUTO_INCREMENT,
+  `exam_date` text NOT NULL,
+  `exam_time` text NOT NULL,
+  PRIMARY KEY (`exam_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=18 ;
+
+--
+-- Tablo döküm verisi `exam`
+--
+
+INSERT INTO `exam` (`exam_id`, `exam_date`, `exam_time`) VALUES
+(12, '26/05/2013', '30'),
+(13, '26/05/2013', '30'),
+(14, '26/05/2013', '30'),
+(15, '26/05/2013', '30'),
+(16, '26/05/2013', '30'),
+(17, '26/05/2013', '30');
+
+-- --------------------------------------------------------
+
+--
+-- Tablo için tablo yapısı `exam_question`
+--
+
+CREATE TABLE IF NOT EXISTS `exam_question` (
+  `exam_question_id` int(11) NOT NULL AUTO_INCREMENT,
+  `exam_id` int(11) NOT NULL,
+  `question_id` int(11) NOT NULL,
+  PRIMARY KEY (`exam_question_id`),
+  KEY `exam_id` (`exam_id`,`question_id`),
+  KEY `question_id` (`question_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
 
 -- --------------------------------------------------------
 
@@ -136,14 +175,14 @@ CREATE TABLE IF NOT EXISTS `question` (
   `subject_id` int(11) NOT NULL,
   PRIMARY KEY (`question_id`),
   KEY `subject_id` (`subject_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=37 ;
 
 --
 -- Tablo döküm verisi `question`
 --
 
 INSERT INTO `question` (`question_id`, `question_detail`, `subject_id`) VALUES
-(16, 'bu benim ilk sorum', 13);
+(36, 'aşağıdakilerden cümlelerden hangisi anlamca olumlu biçimce olumsuzdur?', 13);
 
 -- --------------------------------------------------------
 
@@ -151,6 +190,17 @@ INSERT INTO `question` (`question_id`, `question_detail`, `subject_id`) VALUES
 -- Görünüm yapısı durumu `question_and_answer`
 --
 CREATE TABLE IF NOT EXISTS `question_and_answer` (
+`question_id` int(11)
+,`question_detail` text
+,`answer_id` int(11)
+,`answer_detail` text
+);
+-- --------------------------------------------------------
+
+--
+-- Görünüm yapısı durumu `question_and_solution_detail`
+--
+CREATE TABLE IF NOT EXISTS `question_and_solution_detail` (
 `question_id` int(11)
 ,`question_detail` text
 ,`answer_id` int(11)
@@ -168,14 +218,14 @@ CREATE TABLE IF NOT EXISTS `solution` (
   `answer_id` int(11) NOT NULL,
   PRIMARY KEY (`solution_id`),
   KEY `answer_id` (`answer_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
 -- Tablo döküm verisi `solution`
 --
 
 INSERT INTO `solution` (`solution_id`, `question_id`, `answer_id`) VALUES
-(1, 16, 195);
+(5, 36, 235);
 
 -- --------------------------------------------------------
 
@@ -204,6 +254,17 @@ INSERT INTO `subject` (`subject_id`, `subject_name`, `lecture_id`) VALUES
 (16, 'yeni bir konu', 2),
 (17, 'hayat bilgisi', 2);
 
+-- --------------------------------------------------------
+
+--
+-- Görünüm yapısı durumu `subject_and_question_detail`
+--
+CREATE TABLE IF NOT EXISTS `subject_and_question_detail` (
+`subject_id` int(11)
+,`subject_name` text
+,`question_id` int(11)
+,`question_detail` text
+);
 -- --------------------------------------------------------
 
 --
@@ -313,6 +374,24 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 -- --------------------------------------------------------
 
 --
+-- Görünüm yapısı `question_and_solution_detail`
+--
+DROP TABLE IF EXISTS `question_and_solution_detail`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `question_and_solution_detail` AS select `question`.`question_id` AS `question_id`,`question`.`question_detail` AS `question_detail`,`answer`.`answer_id` AS `answer_id`,`answer`.`answer_detail` AS `answer_detail` from ((`question` join `answer`) join `solution`) where ((`solution`.`answer_id` = `answer`.`answer_id`) and (`question`.`question_id` = `solution`.`question_id`));
+
+-- --------------------------------------------------------
+
+--
+-- Görünüm yapısı `subject_and_question_detail`
+--
+DROP TABLE IF EXISTS `subject_and_question_detail`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `subject_and_question_detail` AS select `subject`.`subject_id` AS `subject_id`,`subject`.`subject_name` AS `subject_name`,`question`.`question_id` AS `question_id`,`question`.`question_detail` AS `question_detail` from ((`subject` join `question`) join `solution`) where ((`subject`.`subject_id` = `question`.`subject_id`) and (`question`.`question_id` = `solution`.`question_id`));
+
+-- --------------------------------------------------------
+
+--
 -- Görünüm yapısı `teacher_brach_view`
 --
 DROP TABLE IF EXISTS `teacher_brach_view`;
@@ -328,6 +407,13 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 ALTER TABLE `answer`
   ADD CONSTRAINT `answer_ibfk_1` FOREIGN KEY (`question_id`) REFERENCES `question` (`question_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Tablo kısıtlamaları `exam_question`
+--
+ALTER TABLE `exam_question`
+  ADD CONSTRAINT `exam_question_ibfk_2` FOREIGN KEY (`question_id`) REFERENCES `question` (`question_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `exam_question_ibfk_1` FOREIGN KEY (`exam_id`) REFERENCES `exam` (`exam_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Tablo kısıtlamaları `message`

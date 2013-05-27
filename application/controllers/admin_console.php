@@ -128,8 +128,10 @@ class admin_console extends CI_Controller {
 			if ($insert_new_question == TRUE) 
 			{
 				$this->last_question_id = $this->question_model->last_record_id;
+
+				//var_dump($this->last_question_id);
 				//$this->addNewAnswerForm();
-				echo "<meta http-equiv='refresh' content='0.1; URL=".base_url()."admin_console/addNewAnswerForm'>";
+				echo "<meta http-equiv='refresh' content='0.1; URL=".base_url()."admin_console/addNewAnswerForm/".$this->last_question_id."'>";
 			}
 
 		}
@@ -142,10 +144,12 @@ class admin_console extends CI_Controller {
 
 	}
 
-	public function addNewAnswerForm()
+	public function addNewAnswerForm($id)
 	{
 		$this->load->model('question_model');
-		$last_question = $this->question_model->readRow($this->last_question_id);
+		$last_question = $this->question_model->readRow($id);
+
+		//var_dump($this->last_question_id);
 
 		$this->parser_data['title'] = 'Yeni Cevap Oluştur';
 		$this->parser_data['last_question'] = $last_question;		
@@ -181,7 +185,7 @@ class admin_console extends CI_Controller {
 					{
 						$message = "Tebrikler..! Cevap ekleme de basarili";
 						echo "<script>alert(\"$message\");</script>";
-						echo "<meta http-equiv='refresh' content='0.1; URL=".base_url()."admin_console/addNewSolutionForm'>";
+						echo "<meta http-equiv='refresh' content='0.1; URL=".base_url()."admin_console/addNewSolutionForm/".$question_id."'>";
 
 					}
 
@@ -190,7 +194,7 @@ class admin_console extends CI_Controller {
 				{
 					$message = "HATA:: Cevap Ekleme İslemi Basarisiz Oldu :(";
 					echo "<script>alert(\"$message\");</script>";
-					$this->addNewAnswerForm();
+					$this->addNewAnswerForm($question_id);
 
 				}
 			}
@@ -199,20 +203,20 @@ class admin_console extends CI_Controller {
 		{
 			$message = "Hic Olmassa Bir Tanecik Cevap Ekleyin :(";
 			echo "<script>alert(\"$message\");</script>";
-			$this->addNewAnswerForm();
+			$this->addNewAnswerForm($question_id);
 
 		}	
 
 	}
 
 
-	public function addNewSolutionForm()
+	public function addNewSolutionForm($id)
 	{
 		$question_model = $this->load->model('question_model');
-		$this->parser_data['last_question'] = $this->question_model->readRow($this->last_question_id);
+		$this->parser_data['last_question'] = $this->question_model->readRow($id);
 		
-		$answer_model = $this->load->model('answer_model');
-		$this->parser_data['last_answers'] = $this->answer_model->readRow($this->last_question_id);
+		$this->load->model('question_and_answer_model');
+		$this->parser_data['last_answers'] = $this->question_and_answer_model->readRow($id);
 
 		$this->parser_data['title'] = 'Yeni Çözüm Ekle';
 
@@ -245,14 +249,14 @@ class admin_console extends CI_Controller {
 			{
 				$message = "Dogru cevap eklenemedi :(";
 				echo "<script>alert(\"$message\");</script>";
-				$this->addNewSolutionForm();
+				$this->addNewSolutionForm($question_id);
 			}
 		}
 		else
 		{
 			$message = "Lutfen dogru cevabi secin :(";
 			echo "<script>alert(\"$message\");</script>";
-			$this->addNewSolutionForm();			
+			$this->addNewSolutionForm($question_id);			
 		}
 	}
 

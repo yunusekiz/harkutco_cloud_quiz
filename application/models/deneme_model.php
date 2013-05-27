@@ -1,19 +1,35 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class answer_model extends CI_Model {
+class deneme_model extends CI_Model {
 
-	protected $last_record_id;
+	public $last_record_id;
 
 
 	public function __construct()
     {
         parent::__construct();
 
-        $this->load->library('model_killer_library');
-        $this->model_killer_library->setTableName('answer');
-        $this->model_killer_library->setNameOfIdColumn('answer_id');
+        //$this->load->library('model_killer_library');
+        //$this->model_killer_library->setTableName('answer');
+        //$this->model_killer_library->setNameOfIdColumn('answer_id');
         //$this->model_killer_library->setViewTableName('question_and_answer');
     }
+
+
+	public function getSpecificColumns()
+	{
+		$query = $this->db->select('question_and_answer.question_detail, question_and_answer.answer_detail, question_and_answer.question_id')->from('question_and_answer')->join('question', "question.question_id = question_and_answer.question_id")->get();
+		
+		if ($query->num_rows()>0)
+		{
+			$result_array = $query->result_array();
+			$one_more_array = array('last_exam' => array('questions' => $result_array));
+			return $one_more_array;			
+		}
+		else
+			return NULL;
+	}
+
 
 
 	public function insertNewAnswer($answer_detail,$question_id)

@@ -167,6 +167,19 @@ class model_killer_library extends CI_Model {
 			return NULL;
 	}
 
+	public function getSpecificColumns($table_1, $table_2, $joint_id)
+	{
+		$query = $this->db->select('*')->from($table_2)->join($table_1, "$table_1.$joint_id = $table_2.$joint_id")->get();
+		
+		if ($query->num_rows()>0)
+		{
+			$result_array = $query->result_array();
+			return $result_array;			
+		}
+		else
+			return NULL;
+	}
+
 	public function matchRecords($where)
 	{
 		$query = $this->db->select('*')->from($this->table_name)->where($where)->get();

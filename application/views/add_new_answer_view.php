@@ -32,7 +32,7 @@
 </div>
 
 <div class="controls">
-        <input type="submit" value="Kaydet ve Devam Et" class="btn btn-success">
+        <input type="submit" value="Kaydet ve Devam Et" class="btn btn-block btn-success btn-large">
 </div> 
 
 </form>

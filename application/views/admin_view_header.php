@@ -7,10 +7,33 @@
       <link href="{base}assets/css/bootstrap.css" type="text/css" rel="stylesheet">
       <link href="{base}assets/css/bootstrap-responsive.css" type="text/css" rel="stylesheet">
       <link href="{base}assets/css/main.css" type="text/css" rel="stylesheet">
-
+      <link href="{base}assets/css/jquery-ui-1.10.0.custom.css" rel="stylesheet">
+      
       <script src="{base}assets/js/jquery.js"></script>
       <script src="{base}assets/js/bootstrap.js"></script>
+      <script src="{base}assets/js/jquery-ui-1.10.0.custom.js"></script>
 </head>
+
+
+<!--  DatePicker BootStrap  -->
+  <script>
+  $(function() {
+    $( "#datepicker" ).datepicker({
+      inline: true
+    });
+    // Hover states on the static widgets
+/*    $( "#dialog-link, #icons li" ).hover(
+      function() {
+        $( this ).addClass( "ui-state-hover" );
+      },
+      function() {
+        $( this ).removeClass( "ui-state-hover" );
+      }
+    );*/
+  });
+  </script>
+<!--/ DatePicker BootStrap  --> 
+
 <body>
 <img alt="full screen background image" src="{base}assets/images/background_6.jpg" id="full-screen-background-image" /> 
 
@@ -94,7 +117,7 @@
                 <ul class="nav pull-left">
                     <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-file icon-white"></i> Sınavlar <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#" data-toggle="modal"><i class="icon-plus"></i> Yeni Sınav Oluştur</a></li>
+                            <li><a href="{base}exam"><i class="icon-plus"></i> Yeni Sınav Oluştur</a></li>
                             <li class="divider"></li>
                            <li><a href="#"><i class="icon-signal"></i> Sınav İstatistikleri</a></li>
                         </ul>
